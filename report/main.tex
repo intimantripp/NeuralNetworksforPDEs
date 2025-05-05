@@ -1,0 +1,46 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[hidelinks]{hyperref}
+\addbibresource{bibliography.bib} % Specify the .bib file
+
+
+\setlength{\topmargin}{0.0in}
+\setlength{\oddsidemargin}{0.33in}
+\setlength{\textheight}{9.0in}
+\setlength{\textwidth}{6.0in}
+\renewcommand{\baselinestretch}{1.25}
+
+
+\title{Numerical Solutions of Differential Equations using Neural Networks}
+
+\date{Candidate Number: 1090497}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+
+
+\section{Introduction}\label{sec: intro}
+\input{sections/0_introduction.tex}
+\section{Preliminaries}\label{sec:preliminaries}
+\input{sections/1_preliminaries.tex}
+\section{Ordinary Differential Equations}\label{sec:odes}
+\section{Extension: Partial Differential Equations}\label{sec:pdes}
+\section{Conclusion}\label{sec:conclusion}
+
+\end{document}

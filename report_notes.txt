@@ -1,0 +1,3 @@
+• Outline types of neural networks in the introduction, and specify that we are talking about feed forward nn's with loss functions specified
+• Universal approximation theorem - mention
+• Use periodic functions to test extrapolation (likely show how poor NNs are at extrapolation) - Sarah's good idea from class
