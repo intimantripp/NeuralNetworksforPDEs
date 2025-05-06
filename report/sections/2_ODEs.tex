@@ -1,0 +1,28 @@
+Having outlined the methodology for using neural networks to solve differential equations, in this 
+section we begin a more systematic investigation of their performance across a range of ordinary
+differential equation (ODE) problems. This section is divided into two main parts: initial value 
+problems (IVPs) and boundary value problems (BVPs). In each case, we examine the extent to which 
+neural networks can learn accurate solutions, and how their performance is affected by architectural 
+and training choices.
+
+In the IVP setting, we consider three representative classes of problems: exponential decay,
+solutions exhibiting a singularity, and periodic solutions. These problems allow us to assess 
+both interpolation accuracy and a network's ability to extrapolate beyond the training domain.
+
+For BVPs, our focus will remain on evaluating the quality of the approximation within the 
+prescribed domain. Since boundary conditions are enforced at fixed endpoints, extrapolation 
+beyond the interval is not typically meaningful. Instead, we investigate how the network adapts
+to constraints at both boundaries, and how well it captures internal behaviour with different
+choices of architecture and optimisation.
+
+In both IVPs and BVPs, we systematically explore the influence of key design parameters: 
+the number of neurons per layer, the number of hidden layers, the choice of activation function,
+ and optimisation settings including learning rate and optimiser type. These experiments will 
+ highlight the sensitivity of neural network solvers to such hyperparameters and help identify 
+ configurations that yield stable and accurate approximations across different problem types.
+
+\subsection{Initial Value Problems}\label{sec:IVPs}
+
+\cite{goodfellow2016deep}
+
+

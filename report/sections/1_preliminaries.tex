@@ -44,7 +44,7 @@ The network as a whole consists of a composition of such layers. Starting from t
 vector \( \mathbf{z}^{(0)} = \mathbf{x} \), each successive layer transforms the output of the previous
 one. For a network with \( L \) layers, the computation proceeds recursively:
 \[
-    \mathbf{z}^{(l)} = \sigma^{(L)}\left( \mathbf{W}^{(l)} \mathbf{z}^{(l-1)} + \mathbf{b}^{(l)} 
+    \mathbf{z}^{(l)} = \sigma^{(l)}\left( \mathbf{W}^{(l)} \mathbf{z}^{(l-1)} + \mathbf{b}^{(l)} 
     \right), \quad \text{for } l = 1, \dots, L-1,
 \]
 with the final output given by
@@ -58,9 +58,8 @@ are learned during training. The architecture is defined by the number of layers
 of neurons \( n_l \) in each layer, and the choice of activation functions \( \sigma^{(l)} \).
 The first and last layers are termed the input and output layers respectively, while intermediate 
 layers are termed hidden layers. Figure \ref{fig:nn-architecture} gives an an illustrative diagram of 
-a neural network architecture, with each neuron denoted by a circle, and the lines connecting each
-neuron indicating an output of a single neuron being passed as an input to subsequent neurons for 
-processing.
+a neural network architecture, with each neuron denoted by a circle, and connections indicating the
+output of one neuron passed as an input to neurons in the next layer.
 
 \begin{figure}[h]
     \centering
@@ -114,11 +113,11 @@ When the desired outputs are continuous, a common choice is the mean squared err
 \]
 where \( \{ (\mathbf{x}^{(i)}, y^{(i)}) \}_{i=1}^N \) is the training dataset of input-output pairs.
 
-To minimise the loss function, \( \mathcal{L}(\theta) \), a gradient-based approach 
-is typically used. This requires computing the gradient of the loss with respect to all network 
-parameters. This is made efficient by the \emph{backpropagation algorithm}, which systematically 
-applies the chain rule of calculus to compute these derivatives by propagating error signals backward 
-through the layers of the network.
+To minimise the loss function, \( \mathcal{L}(\theta) \), a gradient-based optimisation method is 
+used. This requires
+computing the gradient of the loss with respect to all network parameters. This is made efficient by 
+the \emph{backpropagation algorithm}, which systematically applies the chain rule of calculus to 
+compute these derivatives by propagating error signals backward through the layers of the network.
 
 Let us denote the output of layer \( l \) as \( \mathbf{z}^{(l)} \in \mathbb{R}^{n_l} \), computed via
 \[
@@ -147,11 +146,154 @@ Once the error signals are computed for each layer, the gradients of the loss wi
     \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}} = \boldsymbol{\delta}^{(l)}.
 \]
 
-These gradients are then used in an optimisation routine (e.g., stochastic gradient descent) to update the parameters:
+These gradients are then used in an optimisation routine, such as Adam or Stochastic Gradient Descent,
+to update the parameters:
 \[
-    \mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}}, \quad
-    \mathbf{b}^{(l)} \leftarrow \mathbf{b}^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}},
+    \mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \alpha \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}}, \quad
+    \mathbf{b}^{(l)} \leftarrow \mathbf{b}^{(l)} - \alpha \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}},
 \]
-where \( \eta > 0 \) is the learning rate.
+where \( \alpha > 0 \) is the learning rate.
 
-This process is repeated iteratively over the training data until convergence to a (local) minimum of the loss function. In practice, more advanced optimisers such as Adam or RMSProp are often used, which adaptively adjust the learning rate based on estimates of past gradients.
+This optimisation process is repeated over the training dataset in multiple passes 
+(epochs), until convergence to a local minimum of the loss function.
+
+This iterative update process constitutes the core of neural network training, and naturally 
+divides the procedure into a sequence of \emph{forward passes}, where predictions are computed 
+by modifying and propagating forward the inputs, 
+and \emph{backward passes}, where gradients are propagated backwards and parameters are updated. Each 
+training epoch can be visualised as a forward sweep through the network architecture illustrated
+by Figure \ref{fig:nn-architecture}, followed by a backward sweep in which gradients are 
+computed via backpropagation and used to adjust the network parameters.
+
+\subsection{Neural Networks for Differential Equations}
+
+When applying neural networks to solve differential equations, the nature of the problem differs 
+fundamentally from standard supervised learning tasks. In conventional machine learning, a model 
+learns from a dataset of labelled input-output pairs 
+\( \{ (\mathbf{x}^{(i)}, y^{(i)}) \} \), and is trained to minimise prediction error on unseen
+examples drawn from the same underlying distribution. In contrast, solving a differential equation 
+involves finding a function that satisfies a differential constraint and associated boundary or 
+initial conditions. No explicit data labels are given; instead, a loss function is constructed that 
+penalises violations of the governing equation at selected collocation points. This loss typically 
+involves computing derivatives of the network output with respect to its input — a task well suited 
+to modern automatic differentiation frameworks.
+
+Another key difference is that supervised learning often involves noisy training data due to 
+measurement error or system variability. Neural networks in that context are trained to generalise 
+despite this uncertainty. Differential equation problems, by contrast, are typically deterministic: 
+the equations are known exactly, and the solution is expected to satisfy them precisely. As a result, 
+the concepts of overfitting and underfitting take on new meaning — referring to how well the learned 
+function satisfies the equation and constraints, rather than its generalisation to unseen data.
+
+Before analysing more complex problem classes, we conclude this section with a simple illustrative 
+example. This serves to demonstrate the methodology outlined, reinforce the distinctions 
+from standard supervised learning highlighted above, and validate our implementation method. 
+It is also representative of the general method applied in subsequent sections when training 
+neural networks in this report.
+
+We consider the boundary value problem
+\[
+\begin{aligned}
+    y''(x) &= 2, \quad 0 < x < 1, \\
+    y(0) &= 1, \\
+    y(1) &= 1,
+\end{aligned}
+\]
+whose exact solution is \( y(x) = 1 + x(1 - x) \).
+
+We approximate this solution using a neural network \( \hat{y}(x) = f_\theta(x) \), where 
+\( \theta \) denotes the trainable weights and biases. The loss function penalises both 
+deviations from the differential equation and violations of the boundary conditions:
+\begin{equation}
+\label{eq:prelim_loss_func}
+\mathcal{L}(\theta) = \sum_{k=1}^N \left( \hat{y}''(x_k) - 2 \right)^2 
++ \gamma \left( \hat{y}(0) - 1 \right)^2 
++ \gamma \left( \hat{y}(1) - 1 \right)^2,
+\end{equation}
+where \( \{x_k\}_{k=1}^N \subset (0,1) \) are collocation points, and \( \gamma > 0 \) is a penalty 
+coefficient.
+
+Our model architecture is illustrated in Figure~\ref{fig:preamble_neural_net}. It consists of a 
+fully connected feedforward neural network with two hidden layers, each containing five neurons. 
+The activation function in the hidden layers is the hyperbolic tangent, \( \tanh(x) \), chosen for 
+its smoothness and differentiability. No activation is used in the output layer, consistent 
+with regression tasks involving continuous outputs.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+      % Input layer
+      \matrix[layer] (input) {
+        |[neuron]| $x$ \\
+      };
+
+      % Hidden layer 1
+      \matrix[layer, right=of input] (hidden1) {
+        |[neuron]| $h^{(1)}_1$ \\
+        |[neuron]| $h^{(1)}_2$ \\
+        |[neuron]| $h^{(1)}_3$ \\
+        |[neuron]| $h^{(1)}_4$ \\
+        |[neuron]| $h^{(1)}_5$ \\
+      };
+
+      % Hidden layer 2
+      \matrix[layer, right=of hidden1] (hidden2) {
+        |[neuron]| $h^{(2)}_1$ \\
+        |[neuron]| $h^{(2)}_2$ \\
+        |[neuron]| $h^{(2)}_3$ \\
+        |[neuron]| $h^{(2)}_4$ \\
+        |[neuron]| $h^{(2)}_5$ \\
+      };
+
+      % Output layer
+      \matrix[layer, right=of hidden2] (output) {
+        |[neuron]| $\hat{y}$ \\
+      };
+
+      % Connections: input → hidden1
+      \foreach \j in {1,2,3,4,5}
+        \draw[connect] (input-1-1) -- (hidden1-\j-1);
+
+      % Connections: hidden1 → hidden2
+      \foreach \i in {1,2,3,4,5}
+        \foreach \j in {1,2,3,4,5}
+          \draw[connect] (hidden1-\i-1) -- (hidden2-\j-1);
+
+      % Connections: hidden2 → output
+      \foreach \i in {1,2,3,4,5}
+        \draw[connect] (hidden2-\i-1) -- (output-1-1);
+
+    \end{tikzpicture}
+    \caption{Fully connected feedforward neural network used to approximate the solution \( \hat{y}(x) \). The network takes a scalar input \( x \), passes it through two hidden layers with five neurons each, and outputs a scalar prediction.}
+    \label{fig:preamble_neural_net}
+\end{figure}
+
+The network is trained on 20 equally spaced points in \([0, 1]\), including the boundary values 
+at \( x = 0 \) and \( x = 1 \). We set \( \gamma = 1 \) in the loss function~\eqref{eq:prelim_loss_func}, 
+and optimise using the Adam algorithm with a fixed learning rate of \( \alpha = 0.001 \). Training 
+proceeds for 2000 epochs.
+
+Figure~\ref{fig:prelim_nn_diagnostics} shows the training diagnostics. The left panel illustrates the 
+convergence of the loss during training. The right panel compares the network's prediction to the 
+true solution. The neural network recovers the solution accurately across the domain, with minor 
+deviations near the centre. By increasing the number of epochs we would likely have further have further 
+reduced these deviations.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphics/prelim_nn_loss_curve.png}
+        \caption{Training loss over 2000 epochs.}
+        \label{fig:prelim_nn_loss}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphics/prelim_nn_example.png}
+        \caption{Neural network prediction vs true solution.}
+        \label{fig:prelim_nn_model}
+    \end{subfigure}
+    \caption{Training diagnostics for the neural network solution to the ODE.}
+    \label{fig:prelim_nn_diagnostics}
+\end{figure}

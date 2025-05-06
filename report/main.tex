@@ -8,9 +8,16 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, matrix}
 \usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage[hidelinks]{hyperref}
+\tikzset{
+  neuron/.style={circle, draw, minimum size=0.6cm, inner sep=0pt},
+  layer/.style={matrix of nodes, nodes={neuron}, row sep=0.4cm, column sep=1.2cm, column 1/.style={nodes={draw=none, fill=none}}},
+  connect/.style={-Stealth, thick},
+}
 \addbibresource{bibliography.bib} % Specify the .bib file
 
 
@@ -40,7 +47,9 @@
 \section{Preliminaries}\label{sec:preliminaries}
 \input{sections/1_preliminaries.tex}
 \section{Ordinary Differential Equations}\label{sec:odes}
+\input{sections/2_ODEs.tex}
 \section{Extension: Partial Differential Equations}\label{sec:pdes}
 \section{Conclusion}\label{sec:conclusion}
 
+\printbibliography
 \end{document}
