@@ -1,0 +1,30 @@
+Having assessed neural network performance across a range of ordinary differential equation problems,
+we now turn to a more challenging class: partial differential equations (PDEs). In this section, 
+we consider a single representative elliptic PDE posed on a two-dimensional domain:
+\[
+\begin{aligned}
+    -\nabla^2 u(x, y) &= f(x, y), \quad \text{for } (x, y) \in \Omega := (0,1)^2, \\
+    u(x, y) &= 0, \quad \text{for } (x, y) \in \partial \Omega,
+\end{aligned}
+\]
+where the forcing function is given by
+\[
+f(x, y) = 13\pi^2 \sin(2\pi x)\sin(3\pi y).
+\]
+This problem admits an exact solution \( u(x, y) = \sin(2\pi x)\sin(3\pi y) \), which is smooth, bounded, 
+and vanishes on the boundary of the domain.
+
+Our goal is to assess the ability of neural networks to recover this solution from collocation data 
+sampled over the interior and boundary of the domain. Based on prior results, we restrict our 
+attention to the \(\tanh\) and Swish activation functions, as ReLU has been shown to perform poorly 
+in earlier experiments. We follow a similar methodology to that used in the ODE setting: 
+systematically varying depth and width of the network and evaluating performance using mean 
+squared error over a dense evaluation grid.
+
+In addition to architectural comparisons, we also investigate the robustness of the best-performing 
+networks to data scarcity. Specifically, we assess how the approximation quality degrades as 
+the number of training (collocation) points is reduced, thereby evaluating the sample efficiency 
+of neural networks in recovering PDE solutions from limited information.
+
+\subsection{Architectural Performance on the Poisson Problem}
+
