@@ -18,7 +18,7 @@ parameterised by a collection of weight matrices and bias vectors \( \theta = \{
 The model takes an input vector \( \mathbf{x} \in \mathbb{R}^n \) and propagates it forward through a
 sequence of $L$ layers, each composed of individual units called \emph{neurons}. 
 
-Each \emph{neuron} in a layer performs a simple two-step operation. First, it computes a weighted
+Each neuron in a given layer, $l$, performs a simple two-step operation. First, it computes a weighted
 sum of its inputs and adds a bias term. Then, it applies a non-linear activation function to the result.
 Specifically, if a neuron with weights \( \mathbf{w}^{(l)}_i \in \mathbb{R}^{n_{l-1}} \) and bias 
 \( b^{(l)}_i \in \mathbb{R} \) receives an input vector \( \mathbf{z}^{(l-1)} \in \mathbb{R}^{n_{l-1}} \), 
@@ -49,15 +49,18 @@ one. For a network with \( L \) layers, the computation proceeds recursively:
 \]
 with the final output given by
 \[
-    \hat{\mathbf{y}} = f_\theta(\mathbf{x}) = \sigma^{(l)}(\mathbf{W}^{(L)} \mathbf{z}^{(L-1)} + 
+    \hat{\mathbf{y}} = f_\theta(\mathbf{x}) = \sigma^{(L)}(\mathbf{W}^{(L)} \mathbf{z}^{(L-1)} + 
     \mathbf{b}^{(L)}).
 \]
 
 The total set of network parameters \( \theta = \{ \mathbf{W}^{(l)}, \mathbf{b}^{(l)} \}_{l=1}^L \) 
-are learned during training. The architecture is defined by the number of layers \( L \), the number 
-of neurons \( n_l \) in each layer, and the choice of activation functions \( \sigma^{(l)} \).
-The first and last layers are termed the input and output layers respectively, while intermediate 
-layers are termed hidden layers. Figure \ref{fig:nn-architecture} gives an an illustrative diagram of 
+are learned during training. The architecture is defined by the number of layers \( L \) (often 
+referred to as the \textit{depth} of the network), the number 
+of neurons \( n_l \) in each layer (also referred to as the \textit{depth}), and the choice of 
+activation functions \( \sigma^{(l)} \). The first and last layers are termed the input and output 
+layers respectively, while intermediate 
+layers are termed hidden layers \cite{goodfellow2016deep}. 
+Figure \ref{fig:nn-architecture} gives an an illustrative diagram of 
 a neural network architecture, with each neuron denoted by a circle, and connections indicating the
 output of one neuron passed as an input to neurons in the next layer.
 
@@ -74,12 +77,10 @@ Common activation functions used include:
 
 \begin{itemize}
     \item \textbf{Hyperbolic tangent (tanh):} \quad 
-    \( \sigma(x) = \tanh(x) = \dfrac{e^x - e^{-x}}{e^x + e^{-x}} \), 
-    often preferred for its smoothness and differentiability.
+    \( \sigma(x) = \tanh(x) = \dfrac{e^x - e^{-x}}{e^x + e^{-x}} \)
 
     \item \textbf{Rectified Linear Unit (ReLU):} \quad 
-    \( \sigma(x) = \max(0, x) \), 
-    though not ideal when higher-order derivatives are needed.
+    \( \sigma(x) = \max(0, x) \)
 
     \item \textbf{Leaky ReLU:} \quad 
     \( \sigma(x) = 
@@ -89,7 +90,7 @@ Common activation functions used include:
     \end{cases} \), for small \( \alpha > 0 \).
     
     \item \textbf{Sinusoidal:} \quad 
-    \( \sigma(x) = \sin(x) \), useful for representing oscillatory functions.
+    \( \sigma(x) = \sin(x) \),
 \end{itemize}
 
 In this report we will restrict ourselves to considering these activation functions.
@@ -99,8 +100,8 @@ In this report we will restrict ourselves to considering these activation functi
 
 The parameters of a neural network — namely the weight matrices and bias vectors 
 \( \theta = \{ \mathbf{W}^{(l)}, \mathbf{b}^{(l)} \}_{l=1}^L \) — are learned through a process 
-called \emph{training}. The goal of training is to find a parameter set \( \theta \) such that the 
-network output \( \hat{y} = f_\theta(\mathbf{x}) \) closely approximates the desired output \( y \) 
+called \emph{training}. The goal of training is to find a parameter set $\theta^*$ such that the 
+network output \( \hat{y} = f_{\theta^*}(\mathbf{x}) \) closely approximates the desired output \( y \) 
 over a set of inputs \( \mathbf{x} \in \mathbb{R}^n \).
 
 This is accomplished by defining a \emph{loss function} \( \mathcal{L}(\theta) \) that quantifies the 
@@ -152,7 +153,7 @@ to update the parameters:
     \mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \alpha \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}}, \quad
     \mathbf{b}^{(l)} \leftarrow \mathbf{b}^{(l)} - \alpha \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}},
 \]
-where \( \alpha > 0 \) is the learning rate.
+where \( \alpha > 0 \) is a hyperparameter termed the learning rate.
 
 This optimisation process is repeated over the training dataset in multiple passes 
 (epochs), until convergence to a local minimum of the loss function.
@@ -161,8 +162,8 @@ This iterative update process constitutes the core of neural network training, a
 divides the procedure into a sequence of \emph{forward passes}, where predictions are computed 
 by modifying and propagating forward the inputs, 
 and \emph{backward passes}, where gradients are propagated backwards and parameters are updated. Each 
-training epoch can be visualised as a forward sweep through the network architecture illustrated
-by Figure \ref{fig:nn-architecture}, followed by a backward sweep in which gradients are 
+training epoch can be visualised as a forward sweep through the network architecture, illustrated
+by Figure \ref{fig:nn-architecture}, that generates outputs, followed by a backward sweep in which gradients are 
 computed via backpropagation and used to adjust the network parameters.
 
 \subsection{Neural Networks for Differential Equations}
@@ -182,7 +183,7 @@ Another key difference is that supervised learning often involves noisy training
 measurement error or system variability. Neural networks in that context are trained to generalise 
 despite this uncertainty. Differential equation problems, by contrast, are typically deterministic: 
 the equations are known exactly, and the solution is expected to satisfy them precisely. As a result, 
-the concepts of overfitting and underfitting take on new meaning — referring to how well the learned 
+the concepts of overfitting and underfitting take on new meaning, referring to how well the learned 
 function satisfies the equation and constraints, rather than its generalisation to unseen data.
 
 Before analysing more complex problem classes, we conclude this section with a simple illustrative 
@@ -210,14 +211,16 @@ deviations from the differential equation and violations of the boundary conditi
 + \gamma \left( \hat{y}(0) - 1 \right)^2 
 + \gamma \left( \hat{y}(1) - 1 \right)^2,
 \end{equation}
-where \( \{x_k\}_{k=1}^N \subset (0,1) \) are collocation points, and \( \gamma > 0 \) is a penalty 
-coefficient.
+where \( \{x_k\}_{k=1}^N \subset (0,1) \) are collocation points. \( \gamma > 0 \) is another 
+hyperparameter that functions as a penalty coefficient, scaling the importance of $f_\theta(x)$
+satisfying the boundary conditions relative to satisfying the governing equation.
 
-Our model architecture is illustrated in Figure~\ref{fig:preamble_neural_net}. It consists of a 
+The model architecture we use to solve this problem is illustrated in 
+Figure~\ref{fig:preamble_neural_net}. It consists of a 
 fully connected feedforward neural network with two hidden layers, each containing five neurons. 
 The activation function in the hidden layers is the hyperbolic tangent, \( \tanh(x) \), chosen for 
 its smoothness and differentiability. No activation is used in the output layer, consistent 
-with regression tasks involving continuous outputs.
+with regression tasks involving continuous outputs \cite{goodfellow2016deep}.
 
 \begin{figure}[ht]
     \centering
