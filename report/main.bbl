@@ -60,6 +60,38 @@
       \field{volume}{1}
       \field{year}{2016}
     \endentry
+    \entry{ramachandran2017searching}{article}{}
+      \name{author}{3}{}{%
+        {{hash=e67314b379d3959e35d4acce17b95a6d}{%
+           family={Ramachandran},
+           familyi={R\bibinitperiod},
+           given={Prajit},
+           giveni={P\bibinitperiod}}}%
+        {{hash=91aafc93e68e8c6a55e8cd804c2acaf2}{%
+           family={Zoph},
+           familyi={Z\bibinitperiod},
+           given={Barret},
+           giveni={B\bibinitperiod}}}%
+        {{hash=c636f146591d51579a8119b777394878}{%
+           family={Le},
+           familyi={L\bibinitperiod},
+           given={Quoc\bibnamedelima V},
+           giveni={Q\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \strng{namehash}{057007a647f95fd49b81c4ff27c3c59e}
+      \strng{fullhash}{057007a647f95fd49b81c4ff27c3c59e}
+      \strng{bibnamehash}{057007a647f95fd49b81c4ff27c3c59e}
+      \strng{authorbibnamehash}{057007a647f95fd49b81c4ff27c3c59e}
+      \strng{authornamehash}{057007a647f95fd49b81c4ff27c3c59e}
+      \strng{authorfullhash}{057007a647f95fd49b81c4ff27c3c59e}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1710.05941}
+      \field{title}{Searching for activation functions}
+      \field{year}{2017}
+    \endentry
     \entry{paszke2017automatic}{article}{}
       \name{author}{10}{}{%
         {{hash=56bf0b340039cf8594436a624ff548a9}{%
@@ -119,8 +151,8 @@
       \strng{authorbibnamehash}{724e74fc18651eb78eb82fbcd1d9dfb1}
       \strng{authornamehash}{724e74fc18651eb78eb82fbcd1d9dfb1}
       \strng{authorfullhash}{8e924960ee7482ab2452016228f53660}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Automatic differentiation in PyTorch}

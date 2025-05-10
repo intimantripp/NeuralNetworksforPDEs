@@ -1,11 +1,11 @@
 Having outlined the methodology for using neural networks to solve differential equations, in this 
-section we begin a more systematic investigation of their performance across a range of ODE problems.
+section, we begin a more systematic investigation of their performance across a range of ODE problems.
 This section is divided into two main parts: initial value problems (IVPs) and boundary value problems
-(BVPs). In each case, we examine the extent to which neural networks can learn accurate solutions, 
+(BVPs). In each case, we examine the extent to which neural networks can learn accurate solutions 
 and how their performance is affected by architectural choices.
 
 In the IVP setting, we consider three representative classes of problems: exponential decay,
-solutions exhibiting a singularity, and periodic solutions. These problems allow us to assess 
+periodic solutions, and solutions containing a singularity. These problems allow us to assess 
 both interpolation accuracy and a network's ability to extrapolate beyond the training domain.
 
 For BVPs, our focus will remain on evaluating the quality of the approximation within the 
@@ -14,31 +14,30 @@ beyond the interval is not typically meaningful. Instead, we investigate how the
 to constraints at both boundaries, and how well it captures internal behaviour with different
 choices of architecture and optimisation.
 
-To systematically explore the influence of key design parameters, for each problem we will vary: 
+To systematically explore the influence of key design parameters, for each problem, we will vary: 
 the number of neurons per hidden layer, the number of hidden layers and the choice of activation 
-function. These experiments will serve to assess neural networks ablity to solve differential 
+function. These experiments will serve to assess neural networks' ability to solve differential 
 equation problems, along with understanding how this ability varies with architectural choices. 
 We do not consider networks with different numbers of neurons in each layer, and we use the MSE
-loss function for all models. We will mainly compare the $\tanh$ and ReLU activation functions,
-although in some cases where ReLU performs poorly we instead compare $\tanh$ to the Swish
-activation function. We also use the same activation functions in a single network, helping to 
-isolate the effect of activation functions.
+loss function for all models. We choose between the $\tanh$ and ReLU activation functions,
+these being two of the most common activation functions chosen \cite{goodfellow2016deep}, 
+and use the same activation functions in all networks, as is standard practice \cite{goodfellow2016deep}.
 
 We deliberately restrict our investigation to variations in network architecture and activation 
 functions, holding other hyperparameters fixed (such as the learning rate, optimiser type, and 
 penalty parameters for enforcing boundary conditions). This choice simplifies the analysis and 
-enables clearer interpretation of the results by isolating the effects of architectural design. 
+enables a clearer interpretation of the results by isolating the effects of architectural design. 
 Our primary interest lies in the representational capability of neural networks — that is, how 
 well different architectures can approximate solutions once trained — rather than in training 
 efficiency. Provided that convergence is achieved, changes to hyperparameters like the learning 
-rate or penalty weight, primarily influence the speed or stability of training and not the final quality 
+rate or penalty weight primarily influence the speed or stability of training and not the final quality 
 of the fit. To this end, we use the Adam optimiser, which is widely regarded as robust to 
 hyperparameter settings such as the learning rate and penalty weight (\cite{goodfellow2016deep},
 Section 8.5.4). To ensure fairness and comparability, all models were trained for the same 
 number of epochs (typically 2500) with 100 training points in the domain, plus the 
 boundary/initial value points. A learning rate of $\alpha = 0.001$ and penalty weight 
 $\gamma = 100$ were used. All 
-models were implemented in python using the PyTorch library \cite{paszke2017automatic}.
+models were implemented in Python using the PyTorch library \cite{paszke2017automatic}.
 
 
 \subsection{Initial Value Problems}\label{sec:IVPs}
@@ -73,11 +72,11 @@ activation function.
 
 
 The heatmaps in Figure~\ref{fig:expdecay_sidebyside} reveal several consistent trends. For 
-both activation functions, increasing the number of neurons per layer lead to improved 
+both activation functions, increasing the number of neurons per layer leads to improved 
 accuracy for a fixed number of layers. In contrast, increasing depth alone did not guarantee better 
 performance, particularly when layers are narrow. The best-performing configurations are found with 
 moderately deep networks (4--8 layers) and wider layers (10--20 neurons), though the overall 
-sensitivity to architecture is relatively mild — likely due to the simplicity of the target 
+sensitivity to architecture is relatively mild, likely due to the simplicity of the target 
 function. More striking differences emerge in extrapolation. The ReLU-based networks fail to 
 capture the exponential decay beyond the training domain, typically reverting to a linear 
 trajectory. By contrast, the networks trained with \(\tanh\) not only interpolate more accurately 
@@ -103,29 +102,29 @@ This problem allows us to evaluate the capacity of neural networks to approximat
 across a wide domain, and to generalise that behaviour beyond the domain.  
 
 We perform the same analysis as in the previous section, first analysing how the error varies
-for different architectures, and then examining best solutions (we exclude the worst 
-cases from now, as these were purely for comparison to best in the preceding section), shown in Figure 
+for different architectures, and then examining the best solutions (we exclude the worst 
+cases from now, as these were purely for comparison in the preceding section), shown in Figure 
 \ref{fig:ivp_periodic_sidebyside}.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{graphics/ivp_periodic_combined.png}
-    \caption{Comparison of architectural performance for the exponential decay problem using two 
+    \caption{Comparison of architectural performance for the oscillatory problem using two 
     activation functions. Each column shows the MSE heatmap with a log error scale,
-    the best network fit, and the worst network fit.}
+    the best network fit for each activation function.}
     \label{fig:ivp_periodic_sidebyside}
 \end{figure}
 
-We observe here that the choice of activation function has a significant impact on the network's 
-ability to approximate this solution, the ReLU networks seeing neglible improvements 
-in fit as architecture was varied, and the \(\tanh\) activation function yielding 
+We observe that the choice of activation function has a significant impact on the network's 
+ability to approximate this solution, the ReLU networks seeing negligible improvements 
+in fit as the architecture was varied, and the \(\tanh\) activation function yielding 
 noticeably better fits than ReLU. This is intuitive: \(\tanh\) is smooth and nonlinear, 
 sharing important qualitative features with \(\sin(x)\), while ReLU is only piecewise linear 
 and lacks curvature. As such, we would expect ReLU networks to require substantially greater 
 depth and width to match the expressivity of a \(\tanh\)-based network. 
-Nevertheless, both activations struggle to extrapolate periodicity beyond the training domain -
-with the predicted solutions flattening outside the interval, rather than 
-propogating sinusoidal behaviour.
+Both activations struggle to extrapolate periodicity beyond the training domain.
+The predicted solutions flatten outside the interval, rather than 
+propagating sinusoidal behaviour.
 
 
 \subsubsection{Singular Solution}
@@ -148,10 +147,10 @@ using the condition \( y(1.05) = -20 \). This approach allows us to evaluate how
 well neural networks can approximate the solution on either side of the singularity without 
 numerical breakdown. Results are shown in Figure \ref{fig:ivp_singular_sidebyside}.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{graphics/ivp_singularity_combined.png}
-    \caption{Comparison of architectural performance for the exponential decay problem using two 
+    \caption{Comparison of architectural performance for the singular solution problem using two 
     activation functions. Each column shows the MSE heatmap with a log error scale,
     the best network fit, and the worst network fit.}
     \label{fig:ivp_singular_sidebyside}
@@ -162,12 +161,12 @@ lower MSE across a broader range of architectures, the \(\tanh\) activation achi
 better fits for select configurations. Notably, networks using \(\tanh\) require at least 7 hidden 
 layers to perform well, with accuracy dropping sharply for deeper architectures beyond 8 layers. 
 An interesting pattern emerges with respect to width: networks with only one neuron per layer often 
-outperform those with 2–3 neurons, suggesting that minimal width can sometimes aid in learning steep 
+outperform those with 2-3 neurons, suggesting that minimal width can sometimes aid in learning steep 
 gradients near singularities. In terms of qualitative behaviour, the best \(\tanh\) network closely 
 tracks the exact solution on the right side of the singularity and extrapolates smoothly beyond the 
-training region—converging to a nearly linear continuation, while also beginning to capture the shape
+training region, converging to a nearly linear continuation, while also beginning to capture the shape
 on the left side. In contrast, the ReLU network produces jagged, piecewise responses outside the 
-training domain, failing to capture the smooth decay, and completely fails 
+training domain, failing to capture the smooth decay, and completely failing 
 to capture the structure on the left of the singularity.
 
 
@@ -214,13 +213,13 @@ conditions, and how those approximations vary with architecture.
 
 As in the IVP analysis, we assess the effect of architectural variation on solution accuracy.
 For each combination of depth, width, and activation function, we compute the MSE across the domain,
-and visualise the results using heatmaps and representative fits. The best solutions are shown in 
+and visualise the results using heatmaps and the best fits, shown in 
 Figure~\ref{fig:bvp_poisson_sidebyside}.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{graphics/bvp_poisson_combined.png}
-    \caption{Comparison of architectural performance for the exponential decay problem using two 
+    \caption{Comparison of architectural performance for the Poisson BVP using two 
     activation functions. Each column shows the MSE heatmap with a log error scale,
     the best network fit, and the worst network fit.}
     \label{fig:bvp_poisson_sidebyside}
@@ -248,22 +247,20 @@ We now consider a boundary value problem with a discontinuous right-hand side:
     y(1) &= 0.
 \end{aligned}
 \]
-This problem admits a piecewise quadratic solution that is continuous and satisfies the boundary 
-conditions. However, the discontinuity in the forcing term results in a derivative jump at 
-\( x = 0.5 \), which poses a challenge for smooth neural network approximators.
+The exact solution is piecewise quadratic, continuous, and satisfies the boundary conditions. 
+However, the discontinuity in the forcing term induces a derivative jump at \( x = 0.5 \), 
+making this a challenging test case for smooth neural network approximators.
 
-This example allows us to assess how well neural networks can resolve low-regularity features in 
-the solution and adapt to discontinuous dynamics in the governing equation. As before, we 
-systematically vary network architecture and activation function, compute the corresponding 
-approximation error, and visualise representative results. The best-fitting solutions are 
-summarised in Figure~\ref{fig:bvp_piecewise_sidebyside}.
+This example allows us to assess how well neural networks can adapt to discontinuous dynamics
+in the governing equation. As before, we systematically vary network architecture and activation 
+function, compute the corresponding approximation error, and visualise representative results.
+The best-fitting solutions are summarised in Figure~\ref{fig:bvp_piecewise_sidebyside}.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{graphics/bvp_piecewise_combined.png}
-    \caption{Comparison of architectural performance for the exponential decay problem using two 
-    activation functions. Each column shows the MSE heatmap with a log error scale,
-    the best network fit, and the worst network fit.}
+    \caption{Comparison of architectural performance for the piecewise-forced BVP using two 
+    activation functions. Each column shows the MSE heatmap (log scale) and best-fit solution.}
     \label{fig:bvp_piecewise_sidebyside}
 \end{figure}
 

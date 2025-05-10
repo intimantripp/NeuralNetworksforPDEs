@@ -2,7 +2,7 @@ In recent years, neural networks have emerged as powerful tools in scientific co
 offering new ways to approximate solutions to problems traditionally addressed by numerical methods. 
 While classical techniques such as finite difference, finite element, and Runge-Kutta methods remain 
 foundational for solving differential equations, neural networks provide a mesh-free, 
-data-driven alternative that may generalize better in certain contexts.
+data-driven alternative that may generalise better in certain contexts.
 
 This report investigates the viability of neural networks for approximating solutions to 
 differential equations. Rather than comparing these methods directly with classical techniques, 
@@ -10,28 +10,19 @@ we focus on evaluating their performance across a range of problem types, and on
 how their effectiveness depends on architectural choices. Specifically, we consider 
 their application to ordinary differential equations (ODEs), 
 including initial value problems (IVPs) and boundary value problems (BVPs). We 
-examine their ability to interpolate and extrapolate various types of solutions — 
-including exponential decay, oscillatory behaviour, and singularities. 
+examine their ability to interpolate and extrapolate various types of solutions. 
 As an extension, we also investigate the use of neural networks in solving selected partial 
 differential equations (PDEs) using similar criteria. In each case, we analyse how performance varies 
 with different network architectures and activation functions.
 
-This report is structured as follows:
-
-\begin{itemize}
-    \item \textbf{Section \ref{sec:preliminaries}} introduces the core concepts of neural networks, 
-    including their architecture and training via backpropagation. It then outlines 
-    the specifics of using neural networks to solve differential equations, illustrating the 
-    methodology with a simple example.
-    
-    \item \textbf{Section \ref{sec:odes}} explores the use of neural networks for solving ODEs, 
-    dividing the discussion into IVPs and BVPs. For each, we examine a range of representative problems 
-    and analyse networks' ability to capture the underlying solution behaviour, and how that 
-    ability varies with architecture and activation function choices.
-    
-    \item \textbf{Section \ref{sec:pdes}} extends the investigation to PDEs, following a similar approach. 
-    We test the network on a simple problem and assess how well they satisfy the relevant constraints.
-    
-    \item \textbf{Section \ref{sec:conclusion}} concludes the report by summarising the findings and 
-    suggesting directions for further study.
-\end{itemize}
+This report has the following structure. Section \ref{sec:preliminaries} introduces the core concepts
+ of neural networks, including their architecture and training via backpropagation. It then outlines 
+the specifics of using neural networks to solve differential equations, illustrating the 
+methodology with a simple example. Section \ref{sec:odes} explores the use of neural networks for 
+solving ODEs, dividing the discussion into IVPs and BVPs. For each, we examine a range of 
+representative problems and analyse networks' ability to capture the underlying solution behaviour, and how that 
+ability varies with architecture and activation function choices. Section \ref{sec:pdes}
+extends the investigation to PDEs, following a similar approach. 
+We test networks on a simple problem and assess how well they satisfy the relevant constraints.
+Section \ref{sec:conclusion} concludes the report by summarising the findings and 
+suggesting directions for further study.

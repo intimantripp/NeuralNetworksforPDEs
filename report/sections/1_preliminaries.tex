@@ -1,8 +1,7 @@
-In this section, we outline the basic setup, components, and architecture of feedforward neural 
-networks, and describe the standard approach used for training them. While multiple types of neural 
-networks exist (e.g., convolutional neural networks, recurrent neural networks), we restrict our 
-attention to feedforward neural networks. All references to neural networks in this report refer 
-exclusively to this type.
+In this section, we outline the architecture and training process of feedforward neural 
+networks. Although various neural network architectures exist (e.g., convolutional, recurrent),
+this report exclusively considers feedforward networks. All references to neural networks in this 
+report refer exclusively to this type.
 
 Throughout, we adopt the following notation: vectors are denoted using lowercase bold symbols 
 (e.g., $\mathbf{x}$), while matrices are written in uppercase bold (e.g., $\mathbf{W}$). We denote 
@@ -58,9 +57,9 @@ are learned during training. The architecture is defined by the number of layers
 referred to as the \textit{depth} of the network), the number 
 of neurons \( n_l \) in each layer (also referred to as the \textit{depth}), and the choice of 
 activation functions \( \sigma^{(l)} \). The first and last layers are termed the input and output 
-layers respectively, while intermediate 
+layers, respectively, while intermediate 
 layers are termed hidden layers \cite{goodfellow2016deep}. 
-Figure \ref{fig:nn-architecture} gives an an illustrative diagram of 
+Figure \ref{fig:nn-architecture} gives an illustrative diagram of 
 a neural network architecture, with each neuron denoted by a circle, and connections indicating the
 output of one neuron passed as an input to neurons in the next layer.
 
@@ -73,33 +72,33 @@ output of one neuron passed as an input to neurons in the next layer.
 \end{figure}
 
 
-Common activation functions used include:
+Common activation functions used include \cite{goodfellow2016deep}:
 
 \begin{itemize}
     \item \textbf{Hyperbolic tangent (tanh):} \quad 
-    \( \sigma(x) = \tanh(x) = \dfrac{e^x - e^{-x}}{e^x + e^{-x}} \)
+    \( \sigma(x) = \tanh(x) = \dfrac{e^x - e^{-x}}{e^x + e^{-x}} \). \\
+    This function is smooth, bounded, and differentiable, making it particularly well-suited for 
+    approximating smooth functions.
 
     \item \textbf{Rectified Linear Unit (ReLU):} \quad 
-    \( \sigma(x) = \max(0, x) \)
+    \( \sigma(x) = \max(0, x) \). \\
+    ReLU is computationally efficient and very widely used \cite{ramachandran2017searching}, but it is
+    not differentiable at 0, and its derivative is zero for negative inputs, which can limit learning 
+    in some contexts.
 
-    \item \textbf{Leaky ReLU:} \quad 
-    \( \sigma(x) = 
-    \begin{cases}
-        x, & \text{if } x \geq 0 \\
-        \alpha x, & \text{if } x < 0
-    \end{cases} \), for small \( \alpha > 0 \).
-    
-    \item \textbf{Sinusoidal:} \quad 
-    \( \sigma(x) = \sin(x) \),
+    \item \textbf{Swish:} \quad 
+    \( \sigma(x) = x \cdot \text{sigmoid}(x) = \dfrac{x}{1 + e^{-x}} \). \\
+    A smooth, non-monotonic function proposed as an alternative to ReLU that often improves 
+    performance in deep models \cite{ramachandran2017searching}.
 \end{itemize}
 
-In this report we will restrict ourselves to considering these activation functions.
+In this report, we will restrict ourselves to considering these activation functions.
 
 
 \subsection{Training}\label{sec:nn_training}
 
-The parameters of a neural network — namely the weight matrices and bias vectors 
-\( \theta = \{ \mathbf{W}^{(l)}, \mathbf{b}^{(l)} \}_{l=1}^L \) — are learned through a process 
+The parameters of a neural network, namely the weight matrices and bias vectors 
+\( \theta = \{ \mathbf{W}^{(l)}, \mathbf{b}^{(l)} \}_{l=1}^L \), are learned through a process 
 called \emph{training}. The goal of training is to find a parameter set $\theta^*$ such that the 
 network output \( \hat{y} = f_{\theta^*}(\mathbf{x}) \) closely approximates the desired output \( y \) 
 over a set of inputs \( \mathbf{x} \in \mathbb{R}^n \).
@@ -108,7 +107,7 @@ This is accomplished by defining a \emph{loss function} \( \mathcal{L}(\theta) \
 discrepancy between the network predictions and the target values across a training dataset. 
 In this way, training becomes a minimisation problem, where the goal is to find the parameter 
 configuration $\theta^*$ that minimises the loss function $\mathcal{L}$.
-When the desired outputs are continuous, a common choice is the mean squared error (MSE):
+When the problem is a regression-type task, a common choice is the mean squared error (MSE):
 \[
     \mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} \left\| f_\theta(\mathbf{x}^{(i)}) - y^{(i)} \right\|^2,
 \]
@@ -118,7 +117,7 @@ To minimise the loss function, \( \mathcal{L}(\theta) \), a gradient-based optim
 used. This requires
 computing the gradient of the loss with respect to all network parameters. This is made efficient by 
 the \emph{backpropagation algorithm}, which systematically applies the chain rule of calculus to 
-compute these derivatives by propagating error signals backward through the layers of the network.
+compute these derivatives by propagating error signals backwards through the layers of the network.
 
 Let us denote the output of layer \( l \) as \( \mathbf{z}^{(l)} \in \mathbb{R}^{n_l} \), computed via
 \[
@@ -163,8 +162,8 @@ divides the procedure into a sequence of \emph{forward passes}, where prediction
 by modifying and propagating forward the inputs, 
 and \emph{backward passes}, where gradients are propagated backwards and parameters are updated. Each 
 training epoch can be visualised as a forward sweep through the network architecture, illustrated
-by Figure \ref{fig:nn-architecture}, that generates outputs, followed by a backward sweep in which gradients are 
-computed via backpropagation and used to adjust the network parameters.
+by Figure \ref{fig:nn-architecture}, that generates outputs, followed by a backwards sweep in which
+gradients are computed via backpropagation and used to adjust the network parameters.
 
 \subsection{Neural Networks for Differential Equations}
 
@@ -175,9 +174,7 @@ learns from a dataset of labelled input-output pairs
 examples drawn from the same underlying distribution. In contrast, solving a differential equation 
 involves finding a function that satisfies a differential constraint and associated boundary or 
 initial conditions. No explicit data labels are given; instead, a loss function is constructed that 
-penalises violations of the governing equation at selected collocation points. This loss typically 
-involves computing derivatives of the network output with respect to its input — a task well suited 
-to modern automatic differentiation frameworks.
+penalises violations of the governing equation at selected collocation points.
 
 Another key difference is that supervised learning often involves noisy training data due to 
 measurement error or system variability. Neural networks in that context are trained to generalise 
@@ -193,17 +190,18 @@ It is also representative of the general method applied in subsequent sections w
 neural networks in this report.
 
 We consider the boundary value problem
-\[
-\begin{aligned}
+\begin{equation}\label{eq:intro_problem}
+    \begin{aligned}
     y''(x) &= 2, \quad 0 < x < 1, \\
     y(0) &= 1, \\
     y(1) &= 1,
-\end{aligned}
-\]
+    \end{aligned}
+\end{equation}
+
 whose exact solution is \( y(x) = 1 + x(1 - x) \).
 
-We approximate this solution using a neural network \( \hat{y}(x) = f_\theta(x) \), where 
-\( \theta \) denotes the trainable weights and biases. The loss function penalises both 
+We approximate this solution using a neural network \( \hat{y}(x) = f_\theta(x) \). 
+The loss function penalises both 
 deviations from the differential equation and violations of the boundary conditions:
 \begin{equation}
 \label{eq:prelim_loss_func}
@@ -218,8 +216,8 @@ satisfying the boundary conditions relative to satisfying the governing equation
 The model architecture we use to solve this problem is illustrated in 
 Figure~\ref{fig:preamble_neural_net}. It consists of a 
 fully connected feedforward neural network with two hidden layers, each containing five neurons. 
-The activation function in the hidden layers is the hyperbolic tangent, \( \tanh(x) \), chosen for 
-its smoothness and differentiability. No activation is used in the output layer, consistent 
+The activation function in the hidden layers is the hyperbolic tangent, \( \tanh(x) \). 
+No activation is used in the output layer, consistent 
 with regression tasks involving continuous outputs \cite{goodfellow2016deep}.
 
 \begin{figure}[ht]
@@ -267,7 +265,9 @@ with regression tasks involving continuous outputs \cite{goodfellow2016deep}.
         \draw[connect] (hidden2-\i-1) -- (output-1-1);
 
     \end{tikzpicture}
-    \caption{Fully connected feedforward neural network used to approximate the solution \( \hat{y}(x) \). The network takes a scalar input \( x \), passes it through two hidden layers with five neurons each, and outputs a scalar prediction.}
+    \caption{Fully connected feedforward neural network used to approximate the solution to
+    \eqref{eq:intro_problem}. The network takes a scalar input \( x \), passes it through two 
+    hidden layers with five neurons each, and outputs a scalar prediction.}
     \label{fig:preamble_neural_net}
 \end{figure}
 
@@ -279,10 +279,10 @@ proceeds for 2000 epochs.
 Figure~\ref{fig:prelim_nn_diagnostics} shows the training diagnostics. The left panel illustrates the 
 convergence of the loss during training. The right panel compares the network's prediction to the 
 true solution. The neural network recovers the solution accurately across the domain, with minor 
-deviations near the centre. By increasing the number of epochs we would likely have further have further 
+deviations near the centre. By increasing the number of epochs, we would likely have further
 reduced these deviations.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \begin{subfigure}[t]{0.48\textwidth}
         \centering

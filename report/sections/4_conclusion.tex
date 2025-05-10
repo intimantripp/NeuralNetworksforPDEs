@@ -1,0 +1,19 @@
+In this report, we investigated the capability of feedforward neural networks to approximate solutions 
+to differential equations across a variety of problem settings, focusing specifically on how 
+performance depends on network architecture. Our analysis showed the choice of activation 
+function significantly affected the quality of the solutions. Specifically, the
+ReLU activation function consistently performed poorly across most problem types, while smooth activation 
+functions such as tanh and Swish achieved notably superior results. We also observed that neural 
+networks generally struggled to extrapolate solutions beyond their training domains, regardless 
+of architectural complexity. Additionally, improvements in accuracy exhibited diminishing returns 
+beyond certain thresholds for network depth and width. Lastly, neural networks demonstrated 
+efficiency in solving PDEs, achieving accurate approximations even with relatively 
+sparse training points.
+
+For further investigation, extending our analysis to more complex 
+PDEs, such as higher-dimensional problems, would further test the robustness and 
+general applicability of neural network based methods. Additionally, it would be interesting to
+explore whether architectures with mixed activation functions lead to further improvements.
+
+The code used to generate these results and write this report can be found at:
+\textit{https://github.com/intimantripp/NeuralNetworksforPDEs}
