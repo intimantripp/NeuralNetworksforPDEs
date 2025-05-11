@@ -247,11 +247,8 @@ We now consider a boundary value problem with a discontinuous right-hand side:
     y(1) &= 0.
 \end{aligned}
 \]
-The exact solution is piecewise quadratic, continuous, and satisfies the boundary conditions. 
-However, the discontinuity in the forcing term induces a derivative jump at \( x = 0.5 \), 
-making this a challenging test case for smooth neural network approximators.
-
-This example allows us to assess how well neural networks can adapt to discontinuous dynamics
+The exact solution is piecewise quadratic, continuous, and smooth. This example allows us 
+to assess how well neural networks can adapt to discontinuous dynamics
 in the governing equation. As before, we systematically vary network architecture and activation 
 function, compute the corresponding approximation error, and visualise representative results.
 The best-fitting solutions are summarised in Figure~\ref{fig:bvp_piecewise_sidebyside}.
@@ -265,7 +262,7 @@ The best-fitting solutions are summarised in Figure~\ref{fig:bvp_piecewise_sideb
 \end{figure}
 
 ReLU once again fails to capture the underlying structure of the solution, instead converging to a 
-trivial fit that satisfies only the boundary conditions. In contrast, networks using the 
+fit that satisfies only the boundary conditions, unable to capture any curvature. In contrast, 
+networks using the 
 \(\tanh\) activation function show clear improvement with increased width and depth. 
-Interestingly, rather than adapting to the discontinuity in the forcing term, the 
-\(\tanh\) networks tend to converge toward smooth, sinusoidal-like approximations.
+It also successfully recovers the true solution extremely well.

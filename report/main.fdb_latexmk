@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber main"] 1746796192.95356 "main.bcf" "main.bbl" "main" 1746879489.93548 0
+["biber main"] 1746796192.95356 "main.bcf" "main.bbl" "main" 1746903406.51187 0
   "bibliography.bib" 1746796182.99313 709 38ab02c3a4b31fe25e1be1eddb27214e ""
-  "main.bcf" 1746879489.81874 107571 c382194fa02aefd7b3612add2c8b50f7 "pdflatex"
+  "main.bcf" 1746903406.3854 107571 c382194fa02aefd7b3612add2c8b50f7 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1746879484.36956 "/Users/intimantripp/Documents/Academic/Oxford/ComputationalCaseStudy/NeuralNetworksforPDEs/report/main.tex" "main.pdf" "main" 1746879489.93582 0
+["pdflatex"] 1746903400.80916 "/Users/intimantripp/Documents/Academic/Oxford/ComputationalCaseStudy/NeuralNetworksforPDEs/report/main.tex" "main.pdf" "main" 1746903406.51221 0
   "/Users/intimantripp/Documents/Academic/Oxford/ComputationalCaseStudy/NeuralNetworksforPDEs/report/main.tex" 1746815031.65454 1584 6c1f8064d99dbb10dd559ab024dd934a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -204,7 +204,7 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1730150272.60337 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1730150215 8221430 c76c6b9e43bc702c464fa950a8a12201 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "graphics/bvp_piecewise_combined.png" 1746731912.18579 261551 140fd534c970e726e376cdca4faa0653 ""
+  "graphics/bvp_piecewise_combined.png" 1746903088.76189 264378 d537a41f70257093f3d1ad145ae2933e ""
   "graphics/bvp_poisson_combined.png" 1746729604.96456 258212 b91e0d16e70cfba08afc1750871f37d2 ""
   "graphics/ivp_exponential_combined.png" 1746716100.81869 340602 f6f86145e7dffb59213a780cc34d1bec ""
   "graphics/ivp_periodic_combined.png" 1746722111.52365 420618 91f447d8eac6fdf28e2a07ea60cb076f ""
@@ -216,16 +216,16 @@
   "graphics/pde_uniform_sampling_heatmap.png" 1746801135.46568 193671 ae15ced22b198519b9e72a222197f9e6 ""
   "graphics/prelim_nn_example.png" 1746526185.23733 38560 98ee356c0a8b0104c274ca1d1ff14f24 ""
   "graphics/prelim_nn_loss_curve.png" 1746526185.32278 16644 6e3789a8cdc5dba2bd5c64daf1d19e31 ""
-  "main.aux" 1746879489.81216 11346 4aa8f92f6d8bdf7bf6861a5708e3efdc "pdflatex"
+  "main.aux" 1746903406.37784 11346 950efc1a7c6e43f7e7ca942a717f12fc "pdflatex"
   "main.bbl" 1746796196.79982 5972 8a01dfa1435e4a88a5ad545a6f0ac47a "biber main"
-  "main.out" 1746879489.81723 3095 1ab0c26eeceac40aa5d75d9467d43642 "pdflatex"
-  "main.run.xml" 1746879489.81952 2307 fa280d158a7733084a6a66e2106e4193 "pdflatex"
+  "main.out" 1746903406.38288 3095 1ab0c26eeceac40aa5d75d9467d43642 "pdflatex"
+  "main.run.xml" 1746903406.38663 2307 fa280d158a7733084a6a66e2106e4193 "pdflatex"
   "main.tex" 1746815031.65454 1584 6c1f8064d99dbb10dd559ab024dd934a ""
   "sections/0_introduction.tex" 1746878883.0645 2277 778dda9b15350c63510363af2b71e107 ""
   "sections/1_preliminaries.tex" 1746813641.69355 15939 d6539e3456d5ffdc83dd4221d6740f69 ""
-  "sections/2_ODEs.tex" 1746814916.98517 15116 b312a13662f98febb0793c8de805587b ""
+  "sections/2_ODEs.tex" 1746903400.58615 14843 334facc582ddddac524b0518a6594517 ""
   "sections/3_PDEs.tex" 1746813500.63265 5719 860afc710effc019e9b3bafaab3c7d99 ""
-  "sections/4_conclusion.tex" 1746879484.16399 1451 003872a56710d5f10966d3921ea9be15 ""
+  "sections/4_conclusion.tex" 1746879493.42928 1451 003872a56710d5f10966d3921ea9be15 ""
   (generated)
   "main.aux"
   "main.bcf"
